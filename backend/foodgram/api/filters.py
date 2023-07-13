@@ -16,11 +16,11 @@ class RecipeFilter(rest_framework.FilterSet):
     )
 
     def get_is_favorited(self, queryset, name, value):
-        if value == True and self.request.user.is_authenticated:
+        if value and self.request.user.is_authenticated:
             return queryset.filter(favourites__user=self.request.user)
         return queryset
 
     def get_is_in_shopping_cart(self, queryset, name, value):
-        if value == True and self.request.user.is_authenticated:
+        if value and self.request.user.is_authenticated:
             return queryset.filter(shopping_lists__user=self.request.user)
         return queryset

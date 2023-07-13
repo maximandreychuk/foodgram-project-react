@@ -163,7 +163,7 @@ class DownloadShoppingList(APIView):
     def get(self, request):
         if not request.user.shopping_lists.exists():
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+
         ingredients = IngredientRecipe.objects.filter(
             recipe__shopping_lists__user=request.user
         ).order_by('ingredient__name').values(

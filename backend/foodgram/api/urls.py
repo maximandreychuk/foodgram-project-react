@@ -20,11 +20,11 @@ router.register('tags', TagViewSet, basename='tag')
 
 urlpatterns = [
     path('users/subscriptions/', Subscriptions.as_view()),
-    path('recipes/download_shopping_cart/', 
+    path('recipes/download_shopping_cart/',
          DownloadShoppingList.as_view()),
     re_path(r'^users/(?P<pk>\d+)/subscribe/$',
             SubscribeAndUnsubscribe.as_view()),
-    re_path(r'^recipes/(?P<pk>\d+)/favorite/$', 
+    re_path(r'^recipes/(?P<pk>\d+)/favorite/$',
             FavouriteAddDelete.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/shopping_cart/$',
             ShoppingListAddAndDelete.as_view()),

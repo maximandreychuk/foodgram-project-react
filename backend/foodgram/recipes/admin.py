@@ -31,7 +31,7 @@ class RecipeAdmin(admin.ModelAdmin):
     @admin.display(description='тэги')
     def get_tags(self, obj):
         return [i.name for i in obj.tags.all()]
- 
+
     @admin.display(description='ингредиенты')
     def get_ingredients(self, obj):
         return [i.name for i in obj.ingredients.all()]
@@ -44,6 +44,7 @@ class IngredientAdmin(admin.ModelAdmin):
         'measurement_unit'
     )
     list_filter = ('name',)
+
 
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)
