@@ -6,11 +6,11 @@ from users.models import User
 
 class Ingredient(models.Model):
     name = models.CharField(
-        'Название', 
+        'Название',
         max_length=RECIPES_LENGTH
     )
     measurement_unit = models.CharField(
-        'Единица измерения', 
+        'Единица измерения',
         max_length=RECIPES_LENGTH
     )
 
@@ -20,7 +20,7 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(
-        'Название', 
+        'Название',
         max_length=RECIPES_LENGTH
     )
     color = models.CharField(
@@ -44,7 +44,7 @@ class Recipe(models.Model):
         on_delete=models.CASCADE,
         related_name='recipes')
     name = models.CharField(
-        'Название', 
+        'Название',
         max_length=RECIPES_LENGTH
     )
     text = models.TextField('Текст')
@@ -68,7 +68,7 @@ class Recipe(models.Model):
 
 class IngredientRecipe(models.Model):
     ingredient = models.ForeignKey(
-        Ingredient, 
+        Ingredient,
         on_delete=models.CASCADE
     )
     recipe = models.ForeignKey(
@@ -80,7 +80,7 @@ class IngredientRecipe(models.Model):
         validators=[MinValueValidator(1)]
     )
 
-    class Meta:  
+    class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=['ingredient', 'recipe'],

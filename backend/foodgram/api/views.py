@@ -9,14 +9,11 @@ from api.serializers import (
     RecipeWriteSerializer,
     ShoppingListSerializer,
     TagSerializer,
-    UserCreateSerializer,
-    UserSerializer,
 )
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
 from recipes.models import (
     Favourite,
     Ingredient,
@@ -34,7 +31,7 @@ from users.models import Follow, User
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all() 
+    queryset = Recipe.objects.all()
     http_method_names = ('get', 'post', 'patch', 'delete',)
     permissions_classes = (IsAuthorOrReadOnly,)
     pagination_class = CustomPagination
@@ -72,27 +69,27 @@ class TagViewSet(mixins.RetrieveModelMixin,
 
 
 class Subscriptions(APIView):
-    permission_classes=(IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     @action(detail=False)
     def get(self, request):
         subscriptions = User.objects.filter(following__user=request.user)
         serializer = FollowSerializer(
-            subscriptions, 
-            many=True, 
+            subscriptions,
+            many=True,
             context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SubscribeAndUnsubscribe(APIView):
-    permission_classes=(IsAuthenticated,)
-    
+    permission_classes=  (IsAuthenticated,)
+
     def post(self, request, pk):
         author = get_object_or_404(User, pk=pk)
         serializer = FollowSerializer(
-            author, 
-            data=request.data, 
+            author,
+            data=request.data,
             context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
@@ -110,8 +107,8 @@ class SubscribeAndUnsubscribe(APIView):
 
 
 class FavouriteAddDelete(APIView):
-    permission_classes=(IsAuthenticated,)
-    
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, pk):
         recipe = get_object_or_404(Recipe, pk=pk)
         serializer = FavouriteSerializer(
@@ -134,8 +131,8 @@ class FavouriteAddDelete(APIView):
 
 
 class ShoppingListAddAndDelete(APIView):
-    permission_classes=(IsAuthenticated,)
-    
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, pk):
         recipe = get_object_or_404(Recipe, pk=pk)
         serializer = ShoppingListSerializer(
@@ -161,7 +158,7 @@ class ShoppingListAddAndDelete(APIView):
 
 
 class DownloadShoppingList(APIView):
-    permission_classes=(IsAuthorOrReadOnly,)
+    permission_classes = (IsAuthorOrReadOnly,)
 
     def get(self, request):
         if not request.user.shopping_lists.exists():
@@ -183,22 +180,3 @@ class DownloadShoppingList(APIView):
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename="{file}.txt"'
         return response
-
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-
-
-class CustomAuthToken(ObtainAuthToken):
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email
-        })

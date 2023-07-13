@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from recipes.models import (
     Favourite,
     Ingredient,
@@ -8,6 +7,7 @@ from recipes.models import (
     ShoppingList,
     Tag,
 )
+
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
@@ -23,19 +23,20 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     list_filter = ('author', 'name', 'tags',)
-    
+
     @admin.display(description='в избранном')
     def in_favorited(self, obj):
         return obj.favourites.count()
-    
+
     @admin.display(description='тэги')
     def get_tags(self, obj):
         return [i.name for i in obj.tags.all()]
-    
+ 
     @admin.display(description='ингредиенты')
     def get_ingredients(self, obj):
         return [i.name for i in obj.ingredients.all()]
-    
+
+
 class IngredientAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -43,8 +44,6 @@ class IngredientAdmin(admin.ModelAdmin):
         'measurement_unit'
     )
     list_filter = ('name',)
-
-
 
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)

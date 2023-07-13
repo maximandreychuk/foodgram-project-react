@@ -2,7 +2,6 @@ import json
 
 from django.core.management.base import BaseCommand
 from recipes.models import Ingredient
-from foodgram.settings import BASE_DIR
 
 
 class Command(BaseCommand):

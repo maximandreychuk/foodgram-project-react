@@ -138,4 +138,3 @@ DJOSER = {
     },
     'LOGIN_FIELD': 'email'
 }
-
