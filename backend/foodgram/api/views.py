@@ -83,7 +83,7 @@ class Subscriptions(APIView):
 
 
 class SubscribeAndUnsubscribe(APIView):
-    permission_classes=  (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, pk):
         author = get_object_or_404(User, pk=pk)
