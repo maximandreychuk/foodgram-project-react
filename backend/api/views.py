@@ -9,6 +9,7 @@ from api.serializers import (
     ShoppingListSerializer,
     TagSerializer,
 )
+from api.utils import AddAndDeleteAPIview
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum
 from django.http import HttpResponse
@@ -35,30 +36,6 @@ class OnlyReadViewSet(mixins.RetrieveModelMixin,
     pass 
 
 
-class AddAndDeleteAPIview(APIView):
-    def post(self, request, pk):
-        recipe = get_object_or_404(Recipe, pk=pk)
-        serializer = self.serializer_class(
-            recipe,
-            data=request.data,
-            context={'request': request}
-        )
-        serializer.is_valid(raise_exception=True)
-        self.model.objects.create(
-            user=request.user, 
-            recipe=recipe
-        )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-    def delete(self, request, pk):
-        queryset = get_object_or_404(
-            self.model,
-            user=request.user,
-            recipe=get_object_or_404(Recipe, pk=pk)
-        )
-        queryset.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 class Favourite(AddAndDeleteAPIview):
     permission_classes = (IsAuthenticated,)
     serializer_class = FavouriteSerializer
@@ -66,10 +43,11 @@ class Favourite(AddAndDeleteAPIview):
 
     def post(self, request, pk):
         return super().post(request, pk)
-    
+
     def delete(self, request, pk):
         return super().delete(request, pk)
-    
+
+
 class ShoppingList(AddAndDeleteAPIview):
     permission_classes = (IsAuthenticated,)
     serializer_class = ShoppingListSerializer
@@ -77,10 +55,10 @@ class ShoppingList(AddAndDeleteAPIview):
 
     def post(self, request, pk):
         return super().post(request, pk)
-    
+
     def delete(self, request, pk):
         return super().delete(request, pk)
-    
+
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
@@ -152,60 +130,6 @@ class SubscribeViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# class FavouriteAddDelete(APIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     def post(self, request, pk):
-#         recipe = get_object_or_404(Recipe, pk=pk)
-#         serializer = FavouriteSerializer(
-#             recipe,
-#             data=request.data,
-#             context={'request': request}
-#         )
-#         serializer.is_valid(raise_exception=True)
-#         Favourite.objects.create(
-#             user=request.user, 
-#             recipe=recipe
-#         )
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-#     def delete(self, request, pk):
-#         unfollow = get_object_or_404(
-#             Favourite,
-#             user=request.user,
-#             recipe=get_object_or_404(Recipe, pk=pk)
-#         )
-#         unfollow.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# class ShoppingListAddAndDelete(APIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     def post(self, request, pk):
-#         recipe = get_object_or_404(Recipe, pk=pk)
-#         serializer = ShoppingListSerializer(
-#             recipe,
-#             data=request.data,
-#             context={'request': request}
-#         )
-#         serializer.is_valid(raise_exception=True)
-#         ShoppingList.objects.create(
-#             user=request.user,
-#             recipe=recipe
-#         )
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-#     def delete(self, request, pk):
-#         removingfromthelist = get_object_or_404(
-#             ShoppingList,
-#             user=request.user,
-#             recipe=get_object_or_404(Recipe, pk=pk)
-#         )
-#         removingfromthelist.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 class DownloadShoppingList(APIView):
     permission_classes = (IsAuthorOrReadOnly,)
 
@@ -220,11 +144,14 @@ class DownloadShoppingList(APIView):
         ).annotate(amount=Sum('amount'))
 
         shopping_list = 'Список покупок: '
-        for ingredient in ingredients:
-            shopping_list += (
-                f"\n{ingredient['ingredient__name']} "
-                f"({ingredient['ingredient__measurement_unit']}) - "
-                f"{ingredient['amount']}")
+        shopping_list += '\n'.join(
+            [
+                f'\n{ingredient["ingredient__name"]} '
+                f'({ingredient["ingredient__measurement_unit"]})'
+                f' — {ingredient["amount"]}'
+                for ingredient in ingredients
+            ]
+        )
         file = 'shopping_list.txt'
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename="{file}.txt"'
