@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# не помню(не понял) как через миксин, через наследование сделал..
+
+# не понял(не знаю(не помню))) как через миксин, через наследование сделал..
 class AddAndDeleteAPIview(APIView):
     def post(self, request, pk):
         recipe = get_object_or_404(Recipe, pk=pk)
@@ -15,7 +16,7 @@ class AddAndDeleteAPIview(APIView):
         )
         serializer.is_valid(raise_exception=True)
         self.model.objects.create(
-            user=request.user, 
+            user=request.user,
             recipe=recipe
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -20,11 +20,11 @@ router.register(r'users', SubscribeViewSet, basename='user')
 
 urlpatterns = [
     path('recipes/download_shopping_cart/',
-            DownloadShoppingList.as_view()),
+         DownloadShoppingList.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/favorite/$',
-            Favourite.as_view()),
+         Favourite.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/shopping_cart/$',
-            ShoppingList.as_view()),
+         ShoppingList.as_view()),
     path('', include(router.urls)),
     path('auth/', include('djoser.urls.authtoken')),
     path('', include('djoser.urls')),

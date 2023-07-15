@@ -78,8 +78,8 @@ else:
             'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'qwerty'),
             'HOST': 'localhost',
             'PORT': '5432',
-            }
         }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
