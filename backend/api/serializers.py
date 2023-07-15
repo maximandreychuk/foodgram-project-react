@@ -95,10 +95,10 @@ class FollowSerializer(UserSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
-    
+
     def validate(self, data):
         if Follow.objects.filter(
-            author=self.instance, 
+            author=self.instance,
             user=self.context.get('request').user
         ).exists():
             raise serializers.ValidationError(

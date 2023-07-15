@@ -33,7 +33,7 @@ from users.models import Follow, User
 class OnlyReadViewSet(mixins.RetrieveModelMixin,
                       mixins.ListModelMixin,
                       viewsets.GenericViewSet):
-    pass 
+    pass
 
 
 class Favourite(AddAndDeleteAPIview):
@@ -96,7 +96,7 @@ class TagViewSet(OnlyReadViewSet):
 class SubscribeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Follow.objects.all()
-    
+
     @action(detail=False)
     def subscriptions(self, request):
         subscriptions = User.objects.filter(following__user=request.user)
@@ -107,8 +107,8 @@ class SubscribeViewSet(viewsets.ModelViewSet):
             context={'request': request}
         )
         return self.get_paginated_response(serializer.data)
-        
-    @action(detail=True, methods = ['post', 'delete'])
+
+    @action(detail=True, methods=['post', 'delete'])
     def subscribe(self, request, pk):
         if request.method == 'POST':
             author = get_object_or_404(User, pk=pk)

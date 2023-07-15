@@ -1,7 +1,4 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
-from recipes.models import Recipe
-from rest_framework.pagination import BasePagination
+from rest_framework.pagination import PageNumberPagination
 
 
 class CustomPagination(PageNumberPagination):
