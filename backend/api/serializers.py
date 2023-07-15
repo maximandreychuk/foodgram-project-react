@@ -12,7 +12,7 @@ from recipes.models import (
     Tag,
 )
 from rest_framework import serializers
-from users.models import User
+from users.models import Follow, User
 
 
 class Hex2NameColor(serializers.Field):
@@ -84,10 +84,10 @@ class FollowSerializer(UserSerializer):
 
     def get_recipes(self, obj):
         request = self.context.get('request')
-        limit = request.query_params.get('recipes_limit')
+        recipes_limit = request.query_params.get('recipes_limit')
         recipes = obj.recipes.all()
-        if limit:
-            recipes = recipes[:int(limit)]
+        if recipes_limit:
+            recipes = recipes[:int(recipes_limit)]
         serializer = FollowRecipeSerializer(
             recipes, many=True, context={
                 'request': request})
@@ -95,6 +95,20 @@ class FollowSerializer(UserSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
+    
+    def validate(self, data):
+        if Follow.objects.filter(
+            author=self.instance, 
+            user=self.context.get('request').user
+        ).exists():
+            raise serializers.ValidationError(
+                detail='На этого автора вы уже подписались',
+            )
+        if self.context.get('request').user == self.instance:
+            raise serializers.ValidationError(
+                detail='Нельзя подписаться на самого себя',
+            )
+        return data
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -148,13 +162,17 @@ class ReadOnlyRecipeSerializer(serializers.ModelSerializer):
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
         if user.is_anonymous:
-            return 'Зарегистрируйтесь, чтобы добавить рецепт в избранное'
+            raise serializers.ValidationError(
+                'Зарегистрируйтесь, чтобы добавить рецепт в избранное'
+            )
         return user.favourites.filter(recipe=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context.get('request').user
         if user.is_anonymous:
-            return 'Зарегистрируйтесь, чтобы добавить рецепт в список покупок'
+            raise serializers.ValidationError(
+                'Зарегистрируйтесь, чтобы добавить рецепт в список покупок'
+            )
         return user.shopping_lists.filter(recipe=obj).exists()
 
 

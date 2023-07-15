@@ -1,11 +1,10 @@
 from api.views import (
     DownloadShoppingList,
-    FavouriteAddDelete,
+    Favourite,
     IngredientViewSet,
     RecipeViewSet,
-    ShoppingListAddAndDelete,
-    SubscribeAndUnsubscribe,
-    Subscriptions,
+    ShoppingList,
+    SubscribeViewSet,
     TagViewSet,
 )
 from django.urls import include, path, re_path
@@ -16,18 +15,16 @@ router = DefaultRouter()
 router.register('recipes', RecipeViewSet, basename='recipe')
 router.register('ingredients', IngredientViewSet, basename='ingredient')
 router.register('tags', TagViewSet, basename='tag')
+router.register(r'users', SubscribeViewSet, basename='user')
 
 
 urlpatterns = [
-    path('users/subscriptions/', Subscriptions.as_view()),
     path('recipes/download_shopping_cart/',
          DownloadShoppingList.as_view()),
-    re_path(r'^users/(?P<pk>\d+)/subscribe/$',
-            SubscribeAndUnsubscribe.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/favorite/$',
-            FavouriteAddDelete.as_view()),
+            Favourite.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/shopping_cart/$',
-            ShoppingListAddAndDelete.as_view()),
+            ShoppingList.as_view()),
     path('', include(router.urls)),
     path('auth/', include('djoser.urls.authtoken')),
     path('', include('djoser.urls')),

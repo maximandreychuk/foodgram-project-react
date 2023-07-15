@@ -41,7 +41,6 @@ pep8radius==0.9.2
 Pillow==9.5.0
 platformdirs==3.8.1
 psycopg2==2.9.6
-psycopg2-binary==2.9.6
 pycodestyle==2.10.0
 pycparser==2.21
 pyflakes==3.0.1
