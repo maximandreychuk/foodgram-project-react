@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-# не понял(не знаю(не помню))) как через миксин, через наследование сделал..
 class AddAndDeleteAPIview(APIView):
     def post(self, request, pk):
         recipe = get_object_or_404(Recipe, pk=pk)

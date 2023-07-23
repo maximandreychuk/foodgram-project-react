@@ -1,4 +1,5 @@
 from api.filters import RecipeFilter
+from api.mixins import OnlyReadViewSet
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from api.serializers import (
     FavouriteSerializer,
@@ -22,18 +23,12 @@ from recipes.models import (
     ShoppingList,
     Tag,
 )
-from rest_framework import filters, mixins, status, viewsets
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import Follow, User
-
-
-class OnlyReadViewSet(mixins.RetrieveModelMixin,
-                      mixins.ListModelMixin,
-                      viewsets.GenericViewSet):
-    pass
 
 
 class Favourite(AddAndDeleteAPIview):
