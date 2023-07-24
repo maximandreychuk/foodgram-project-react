@@ -56,7 +56,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
-          cd infra/
+          cd gateway/
           # Выполняет pull образа с DockerHub:
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project-react-backend:latest
           #остановка всех контейнеров:
