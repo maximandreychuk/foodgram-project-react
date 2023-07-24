@@ -42,7 +42,7 @@ jobs:
       with:
         context: ./backend/
         push: true
-        tags: 7ras0tresh/foodgram-project-react-backend:latest   
+        tags: 7ras0tresh/foodgram-project-react-backend:latest
 
   deploy:
     runs-on: ubuntu-latest
