@@ -13,7 +13,8 @@ services:
       - pg_data:/var/lib/postgresql/data
   backend:
     image: 7ras0tresh/foodgram-project-react-backend
-    depends_on: db
+    depends_on:
+      -  db
     env_file: .env
     volumes:
       - static:/static_backend
@@ -21,7 +22,8 @@ services:
     restart: always
   frontend:
     image: 7ras0tresh/foodgram-project-react-frontend
-    depends_on: db
+    depends_on: 
+       - db
     volumes:
        - ../frontend/:/app/result_build/
   nginx:
