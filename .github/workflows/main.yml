@@ -56,7 +56,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
-          cd gateway/
+          cd foodgram-project-react/gateway
           # Выполняет pull образа с DockerHub:
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project-react-backend:latest
           #остановка всех контейнеров:
@@ -64,4 +64,4 @@ jobs:
           #удаляем backend(web) контейнер с сервера:
           sudo docker compose rm backend
           # запускаем сборку новых контейнеров
-          sudo docker compose up -d 
+          sudo docker compose up -d
