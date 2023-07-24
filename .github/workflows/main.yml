@@ -123,8 +123,8 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
-          cd foodgram-project-react
-          #sudo rm -f .env
+          cd foodgram-project-react/gateway
+          sudo rm -f .env
           #touch .env
           #echo 'DJANGO_KEY=${{ secrets.DJANGO_KEY }}' > .env
           #echo 'POSTGRES_DB=${{ secrets.POSTGRES_DB }}' >> .env
