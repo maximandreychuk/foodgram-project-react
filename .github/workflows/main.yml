@@ -65,3 +65,9 @@ jobs:
           sudo docker compose rm backend
           # запускаем сборку новых контейнеров
           sudo docker compose up -d
+          sudo docker compose exec backend python manage.py collectstatic --no-input
+          sudo docker compose exec backend python manage.py makemigrations users
+          sudo docker compose exec backend python manage.py migrate users
+          sudo docker compose exec backend python manage.py makemigrations recipes
+          sudo docker compose exec backend python manage.py migrate recipes
+          sudo docker compose exec backend python manage.py import_ingredients ingredients.json
