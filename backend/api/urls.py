@@ -1,4 +1,4 @@
-from api.views import (
+OBfrom api.views import (
     DownloadShoppingList,
     Favourite,
     IngredientViewSet,
@@ -15,7 +15,7 @@ router = DefaultRouter()
 router.register('recipes', RecipeViewSet, basename='recipe')
 router.register('ingredients', IngredientViewSet, basename='ingredient')
 router.register('tags', TagViewSet, basename='tag')
-router.register(r'users', SubscribeViewSet, basename='user')
+router.register('users', SubscribeViewSet, basename='user')
 
 
 urlpatterns = [
