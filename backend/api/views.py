@@ -21,7 +21,7 @@ from recipes.models import (
     Favourite,
     Ingredient,
     IngredientRecipe,
-B    Recipe,
+    Recipe,
     ShoppingList,
     Tag,
 )
