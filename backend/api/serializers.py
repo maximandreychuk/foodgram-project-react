@@ -29,8 +29,6 @@ class Hex2NameColor(serializers.Field):
 
 class UserCreateSerializer(UserCreateSerializer):
 
-    password = serializers.CharField(write_only=True)
-
     class Meta:
         model = User
         fields = (
