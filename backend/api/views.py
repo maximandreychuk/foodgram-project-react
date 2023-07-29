@@ -21,7 +21,7 @@ from recipes.models import (
     Favourite,
     Ingredient,
     IngredientRecipe,
-    Recipe,
+B    Recipe,
     ShoppingList,
     Tag,
 )
@@ -110,11 +110,9 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         )
         return self.get_paginated_response(serializer.data)
 
-    @action(
-            detail=True,
+    @action(detail=True,
             methods=('post', 'delete'),
-            permission_classes=(IsAuthenticated,)
-        )
+            permission_classes=(IsAuthenticated,))
     def subscribe(self, request, pk):
         if request.method == 'POST':
             author = get_object_or_404(User, pk=pk)
