@@ -93,13 +93,13 @@ class TagViewSet(OnlyReadViewSet):
 class SubscribeViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
+
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT', 'PATCH']:
             return UserCreateSerializer
         return UserSerializer
 
-    @action(detail=False, permission_classes = (IsAuthenticated,))
+    @action(detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
         subscriptions = User.objects.filter(following__user=request.user)
         self.paginate_queryset(subscriptions)
@@ -110,7 +110,10 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         )
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=True, methods=('post', 'delete'), permission_classes = (IsAuthenticated,))
+    @action(detail=True, 
+            methods=('post', 'delete'),
+            permission_classes=(IsAuthenticated,)
+    )
     def subscribe(self, request, pk):
         if request.method == 'POST':
             author = get_object_or_404(User, pk=pk)
