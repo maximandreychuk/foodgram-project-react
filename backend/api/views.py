@@ -9,7 +9,7 @@ from api.serializers import (
     RecipeWriteSerializer,
     ShoppingListSerializer,
     TagSerializer,
-    UserCreateSerializer
+    UserCreateSerializer,
     UserSerializer
 )
 from api.utils import AddAndDeleteAPIview
