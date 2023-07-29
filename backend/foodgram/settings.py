@@ -8,7 +8,7 @@ RECIPES_LENGTH = 200
 SECRET_KEY = os.getenv('SECRET_KEY', 'qwerty')
 
 DEBUG = False
-# при False:
+
 ALLOWED_HOSTS = ['84.201.163.45', '127.0.0.1', 'localhost', 'f00dgram.ddns.net']
 
 INSTALLED_APPS = [
