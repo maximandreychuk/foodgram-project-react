@@ -1,5 +1,6 @@
 from api.filters import RecipeFilter
 from api.mixins import OnlyReadViewSet
+from api.pagination import CustomPagination
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from api.serializers import (
     FavouriteSerializer,
@@ -60,6 +61,7 @@ class ShoppingList(AddAndDeleteAPIview):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     http_method_names = ('get', 'post', 'patch', 'delete',)
+    pagination_class = CustomPagination
     permissions_classes = (IsAuthorOrReadOnly,)
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
     filterset_class = RecipeFilter
@@ -80,14 +82,12 @@ class IngredientViewSet(OnlyReadViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('^name',)
-    pagination_class = None
 
 
 class TagViewSet(OnlyReadViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
 
 
 class SubscribeViewSet(viewsets.ModelViewSet):
@@ -102,9 +102,9 @@ class SubscribeViewSet(viewsets.ModelViewSet):
     @action(detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
         subscriptions = User.objects.filter(following__user=request.user)
-        self.paginate_queryset(subscriptions)
+        result=self.paginate_queryset(subscriptions)
         serializer = FollowSerializer(
-            subscriptions,
+            result,
             many=True,
             context={'request': request}
         )
