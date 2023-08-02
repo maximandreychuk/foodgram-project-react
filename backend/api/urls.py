@@ -1,4 +1,4 @@
-Bfrom api.views import (
+from api.views import (
     DownloadShoppingList,
     Favourite,
     IngredientViewSet,
