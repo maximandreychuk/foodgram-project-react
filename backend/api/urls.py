@@ -1,4 +1,4 @@
-from api.views import (
+Bfrom api.views import (
     DownloadShoppingList,
     Favourite,
     IngredientViewSet,
@@ -25,7 +25,7 @@ urlpatterns = [
             Favourite.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/shopping_cart/$',
             ShoppingList.as_view()),
-    path('', include('djoser.urls')),
     path('', include(router.urls)),
+    path('', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
 ]
