@@ -4,7 +4,8 @@ from api.views import (
     IngredientViewSet,
     RecipeViewSet,
     ShoppingList,
-    SubscribeViewSet,
+    Subscribe,
+    Subscriptions,
     TagViewSet,
 )
 from django.urls import include, path, re_path
@@ -15,12 +16,15 @@ router = DefaultRouter()
 router.register('recipes', RecipeViewSet, basename='recipe')
 router.register('ingredients', IngredientViewSet, basename='ingredient')
 router.register('tags', TagViewSet, basename='tag')
-router.register('users', SubscribeViewSet, basename='user')
 
 
 urlpatterns = [
     path('recipes/download_shopping_cart/',
          DownloadShoppingList.as_view()),
+    path('users/subscriptions/', 
+         Subscriptions.as_view()),
+    re_path(r'^users/(?P<pk>\d+)/subscribe/$', 
+            Subscribe.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/favorite/$',
             Favourite.as_view()),
     re_path(r'^recipes/(?P<pk>\d+)/shopping_cart/$',

@@ -90,48 +90,44 @@ class TagViewSet(OnlyReadViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class SubscribeViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class Subscriptions(APIView, CustomPagination):
+    permission_classes = (IsAuthenticated,)
 
-    def get_serializer_class(self):
-        if self.request.method in ['POST', 'PUT', 'PATCH']:
-            return UserCreateSerializer
-        return UserSerializer
-
-    @action(detail=False, permission_classes=(IsAuthenticated,))
-    def subscriptions(self, request):
+    @action(detail=False)
+    def get(self, request):
         subscriptions = User.objects.filter(following__user=request.user)
-        result=self.paginate_queryset(subscriptions)
+        res = self.paginate_queryset(subscriptions, request)
         serializer = FollowSerializer(
-            result,
+            res,
             many=True,
             context={'request': request}
         )
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=True,
-            methods=('post', 'delete'),
-            permission_classes=(IsAuthenticated,))
-    def subscribe(self, request, pk):
-        if request.method == 'POST':
-            author = get_object_or_404(User, pk=pk)
-            serializer = FollowSerializer(
-                author,
-                data=request.data,
-                context={'request': request}
-            )
-            serializer.is_valid(raise_exception=True)
-            Follow.objects.create(user=request.user, author=author)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            subscription = get_object_or_404(
-                Follow,
-                user=request.user,
-                author=get_object_or_404(User, pk=pk)
-            )
-            subscription.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+class Subscribe(APIView):
+    permission_classes=(IsAuthenticated,)
+
+    @action(detail=True)
+    def post(self, request, pk):
+        author = get_object_or_404(User, pk=pk)
+        serializer = FollowSerializer(
+            author,
+            data=request.data,
+            context={'request': request}
+        )
+        serializer.is_valid(raise_exception=True)
+        Follow.objects.create(user=request.user, author=author)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True)
+    def delete(self, request, pk):
+        subscription = get_object_or_404(
+            Follow,
+            user=request.user,
+            author=get_object_or_404(User, pk=pk)
+        )
+        subscription.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class DownloadShoppingList(APIView):
