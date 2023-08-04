@@ -10,8 +10,6 @@ from api.serializers import (
     RecipeWriteSerializer,
     ShoppingListSerializer,
     TagSerializer,
-    UserCreateSerializer,
-    UserSerializer
 )
 from api.utils import AddAndDeleteAPIview
 from django_filters.rest_framework import DjangoFilterBackend
@@ -103,6 +101,7 @@ class Subscriptions(APIView, CustomPagination):
             context={'request': request}
         )
         return self.get_paginated_response(serializer.data)
+
 
 class Subscribe(APIView):
     permission_classes=(IsAuthenticated,)
