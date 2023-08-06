@@ -61,9 +61,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     http_method_names = ('get', 'post', 'patch', 'delete',)
     pagination_class = CustomPagination
     permissions_classes = (IsAuthorOrReadOnly,)
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
-    ordering = ('-id',)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
