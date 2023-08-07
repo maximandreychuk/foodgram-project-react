@@ -8,7 +8,7 @@ const Checkbox = ({
   onChange,
   className,
   color,
-  value = false,
+  value = true,
   name,
   id
 }) => {
