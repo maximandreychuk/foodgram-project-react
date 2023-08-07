@@ -8,7 +8,7 @@ const Checkbox = ({
   onChange,
   className,
   color,
-  value = true,
+  value = false,
   name,
   id
 }) => {
@@ -26,7 +26,7 @@ const Checkbox = ({
       style={{ backgroundColor: value && color }}
       type='button'
     >
-      {value ? "" : <Icons.CheckIcon />}
+      {value ? <Icons.CheckIcon /> : ''}
     </button>
     <span>{name}</span>
   </div>
