@@ -24,7 +24,7 @@ from recipes.models import (
     ShoppingList,
     Tag,
 )
-from rest_framework import filters, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -104,7 +104,7 @@ class Subscriptions(APIView, CustomPagination):
 
 
 class Subscribe(APIView):
-    permission_classes=(IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     @action(detail=True)
     def post(self, request, pk):
